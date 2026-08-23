@@ -8,7 +8,6 @@
     
     <!-- Preconnect & Resource Hints for CDNs -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -1774,8 +1773,8 @@
                 card.onclick = () => switchCgiVideo(index);
 
                 card.innerHTML = `
-                    <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300">
-                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" loading="lazy" class="pointer-events-none w-full h-full"></iframe>
+                    <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300 bg-dark-900">
+                        <img src="https://drive.google.com/thumbnail?id=${video.id}&sz=w600" alt="${video.title}" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
                         
                         <div class="absolute inset-0 bg-dark-950/20 group-hover:bg-transparent transition-all flex items-center justify-center">
                             <div class="w-12 h-12 rounded-full bg-cyanBrand-400 text-dark-950 flex items-center justify-center shadow-xl group-hover:scale-125 transition-transform duration-300">
@@ -1803,8 +1802,8 @@
                 card.onclick = () => switchAiVideo(index);
 
                 card.innerHTML = `
-                    <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300">
-                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" loading="lazy" class="pointer-events-none w-full h-full"></iframe>
+                    <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300 bg-dark-900">
+                        <img src="https://drive.google.com/thumbnail?id=${video.id}&sz=w600" alt="${video.title}" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
                         
                         <div class="absolute inset-0 bg-dark-950/20 group-hover:bg-transparent transition-all flex items-center justify-center">
                             <div class="w-12 h-12 rounded-full bg-purpleBrand-400 text-dark-950 flex items-center justify-center shadow-xl group-hover:scale-125 transition-transform duration-300">
@@ -1832,8 +1831,8 @@
                 card.onclick = () => switchMotionVideo(index);
 
                 card.innerHTML = `
-                    <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300">
-                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" loading="lazy" class="pointer-events-none w-full h-full"></iframe>
+                    <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300 bg-dark-900">
+                        <img src="https://drive.google.com/thumbnail?id=${video.id}&sz=w600" alt="${video.title}" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
                         
                         <div class="absolute inset-0 bg-dark-950/20 group-hover:bg-transparent transition-all flex items-center justify-center">
                             <div class="w-12 h-12 rounded-full bg-indigoBrand-500 text-white flex items-center justify-center shadow-xl group-hover:scale-125 transition-transform duration-300">
@@ -1861,8 +1860,8 @@
                 card.onclick = () => switchReelsVideo(index);
 
                 card.innerHTML = `
-                    <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300">
-                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" loading="lazy" class="pointer-events-none w-full h-full"></iframe>
+                    <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300 bg-dark-900">
+                        <img src="https://drive.google.com/thumbnail?id=${video.id}&sz=w600" alt="${video.title}" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
                         
                         <div class="absolute inset-0 bg-dark-950/20 group-hover:bg-transparent transition-all flex items-center justify-center">
                             <div class="w-12 h-12 rounded-full bg-rose-500 text-white flex items-center justify-center shadow-xl group-hover:scale-125 transition-transform duration-300">
@@ -1890,8 +1889,8 @@
                 card.onclick = () => switchCinematicVideo(index);
 
                 card.innerHTML = `
-                    <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300">
-                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" loading="lazy" class="pointer-events-none w-full h-full"></iframe>
+                    <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300 bg-dark-900">
+                        <img src="https://drive.google.com/thumbnail?id=${video.id}&sz=w600" alt="${video.title}" loading="lazy" decoding="async" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
                         
                         <div class="absolute inset-0 bg-dark-950/20 group-hover:bg-transparent transition-all flex items-center justify-center">
                             <div class="w-12 h-12 rounded-full bg-amber-500 text-dark-950 flex items-center justify-center shadow-xl group-hover:scale-125 transition-transform duration-300">
