@@ -6,16 +6,22 @@
     <title>Vipul Gupta — CGI Video & Motion Graphics Studio</title>
     <meta name="description" content="Personal portfolio and resume of Vipul Gupta: Motion Graphic Designer, CGI Video Editor, & Brand Content Lead.">
     
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <!-- Preconnect & Resource Hints for CDNs -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Asynchronous Non-Render-Blocking Font Awesome Icons -->
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    
+    <!-- Asynchronous Non-Render-Blocking Google Fonts -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"></noscript>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
         tailwind.config = {
@@ -254,6 +260,16 @@
             .text-white { color: #000000 !important; }
             .text-slate-300, .text-slate-400 { color: #333333 !important; }
         }
+
+        /* Font Display Swap for FontAwesome & Icon Fonts */
+        @font-face {
+            font-family: 'Font Awesome 6 Free';
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'Font Awesome 6 Brands';
+            font-display: swap;
+        }
     </style>
 </head>
 
@@ -270,6 +286,8 @@
                     <img src="WhatsApp Image 2026-08-21 at 5.01.25 PM.jpeg" 
                          alt="Vipul Gupta" 
                          class="w-full h-full object-cover rounded-full object-top"
+                         loading="eager"
+                         decoding="async"
                          onerror="this.src='https://placehold.co/100x100/151522/ffffff?text=VG'">
                 </div>
                 <div class="flex flex-col">
@@ -1000,7 +1018,7 @@
 
                 <!-- Main Active Video Frame -->
                 <div class="drive-embed-container shadow-2xl border border-white/10 rounded-2xl overflow-hidden relative">
-                    <iframe id="mainFeaturedFrame" src="https://drive.google.com/file/d/1OFar6XiTorpSgDGVxHJvUW5nwOzEoRel/preview" allow="autoplay" allowfullscreen></iframe>
+                    <iframe id="mainFeaturedFrame" src="https://drive.google.com/file/d/1OFar6XiTorpSgDGVxHJvUW5nwOzEoRel/preview" allow="autoplay" allowfullscreen loading="lazy"></iframe>
                 </div>
             </div>
 
@@ -1757,7 +1775,7 @@
 
                 card.innerHTML = `
                     <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300">
-                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" class="pointer-events-none w-full h-full"></iframe>
+                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" loading="lazy" class="pointer-events-none w-full h-full"></iframe>
                         
                         <div class="absolute inset-0 bg-dark-950/20 group-hover:bg-transparent transition-all flex items-center justify-center">
                             <div class="w-12 h-12 rounded-full bg-cyanBrand-400 text-dark-950 flex items-center justify-center shadow-xl group-hover:scale-125 transition-transform duration-300">
@@ -1786,7 +1804,7 @@
 
                 card.innerHTML = `
                     <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300">
-                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" class="pointer-events-none w-full h-full"></iframe>
+                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" loading="lazy" class="pointer-events-none w-full h-full"></iframe>
                         
                         <div class="absolute inset-0 bg-dark-950/20 group-hover:bg-transparent transition-all flex items-center justify-center">
                             <div class="w-12 h-12 rounded-full bg-purpleBrand-400 text-dark-950 flex items-center justify-center shadow-xl group-hover:scale-125 transition-transform duration-300">
@@ -1815,7 +1833,7 @@
 
                 card.innerHTML = `
                     <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300">
-                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" class="pointer-events-none w-full h-full"></iframe>
+                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" loading="lazy" class="pointer-events-none w-full h-full"></iframe>
                         
                         <div class="absolute inset-0 bg-dark-950/20 group-hover:bg-transparent transition-all flex items-center justify-center">
                             <div class="w-12 h-12 rounded-full bg-indigoBrand-500 text-white flex items-center justify-center shadow-xl group-hover:scale-125 transition-transform duration-300">
@@ -1844,7 +1862,7 @@
 
                 card.innerHTML = `
                     <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300">
-                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" class="pointer-events-none w-full h-full"></iframe>
+                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" loading="lazy" class="pointer-events-none w-full h-full"></iframe>
                         
                         <div class="absolute inset-0 bg-dark-950/20 group-hover:bg-transparent transition-all flex items-center justify-center">
                             <div class="w-12 h-12 rounded-full bg-rose-500 text-white flex items-center justify-center shadow-xl group-hover:scale-125 transition-transform duration-300">
@@ -1873,7 +1891,7 @@
 
                 card.innerHTML = `
                     <div class="drive-embed-container relative overflow-hidden rounded-2xl group-hover:scale-[1.02] transition-transform duration-300">
-                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" class="pointer-events-none w-full h-full"></iframe>
+                        <iframe src="https://drive.google.com/file/d/${video.id}/preview" allow="autoplay" loading="lazy" class="pointer-events-none w-full h-full"></iframe>
                         
                         <div class="absolute inset-0 bg-dark-950/20 group-hover:bg-transparent transition-all flex items-center justify-center">
                             <div class="w-12 h-12 rounded-full bg-amber-500 text-dark-950 flex items-center justify-center shadow-xl group-hover:scale-125 transition-transform duration-300">
