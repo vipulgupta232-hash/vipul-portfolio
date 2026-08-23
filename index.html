@@ -7,7 +7,7 @@
     <meta name="description" content="Personal portfolio and resume of Vipul Gupta: Motion Graphic Designer, CGI Video Editor, & Brand Content Lead.">
     
     <!-- Preconnect & Resource Hints for CDNs -->
-    <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+    <comment-tag id="1"><link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin></comment-tag id="1" text="Lighthouse flagged that there are more than 4 preconnects (Network dependency tree). Preconnects are resource-intensive for the browser. Because I suggest deferring the Tailwind script below, you should change this to '<link rel="dns-prefetch" href="https://cdn.tailwindcss.com">' to free up network resources for critical assets while still resolving the DNS early." type="suggestion">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -20,7 +20,7 @@
     <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"></noscript>
 
     <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <comment-tag id="2"><script src="https://cdn.tailwindcss.com"></script></comment-tag id="2" text="Adding the 'defer' attribute here (i.e., '<script src=\"https://cdn.tailwindcss.com\" defer></script>') prevents this large script from blocking the initial page render. This directly addresses the 'Render-blocking requests', 'Avoid long main-thread tasks', and 'LCP Element render delay' errors you're seeing in the Lighthouse reports." type="suggestion">
 
     <script>
         tailwind.config = {
@@ -282,12 +282,12 @@
             
             <a href="javascript:void(0)" onclick="switchView('portfolio', 'hero')" class="flex items-center gap-3 group">
                 <div class="relative w-9 h-9 rounded-full p-[1px] bg-gradient-to-tr from-indigo-500 via-purple-500 to-cyan-400 shrink-0 shadow-md">
-                    <img src="WhatsApp Image 2026-08-21 at 5.01.25 PM.jpeg" 
+                    <comment-tag id="3"><img src="WhatsApp Image 2026-08-21 at 5.01.25 PM.jpeg" 
                          alt="Vipul Gupta" 
                          class="w-full h-full object-cover rounded-full object-top"
                          loading="eager"
                          decoding="async"
-                         onerror="this.src='https://placehold.co/100x100/151522/ffffff?text=VG'">
+                         onerror="this.src='https://placehold.co/100x100/151522/ffffff?text=VG'"></comment-tag id="3" text="To improve the 'LCP breakdown' Element Render Delay you saw in the report, explicitly define the width and height of this image (e.g., add 'width=\"36\" height=\"36\"'). This helps the browser allocate space before the image downloads, preventing layout shifts and speeding up rendering." type="suggestion">
                 </div>
                 <div class="flex flex-col">
                     <span class="font-bold text-white text-sm tracking-tight group-hover:text-indigo-400 transition-colors">Vipul Gupta</span>
@@ -1094,7 +1094,7 @@
 
                 <!-- Main Active Video Frame -->
                 <div class="drive-embed-container shadow-2xl border border-white/10 rounded-2xl overflow-hidden relative">
-                    <iframe id="aiMainFeaturedFrame" src="https://drive.google.com/file/d/1_PUGdBLHgdI7Rj_NwnZmeTbtQ2FqVhiM/preview" allow="autoplay" allowfullscreen></iframe>
+                    <comment-tag id="4"><iframe id="aiMainFeaturedFrame" src="https://drive.google.com/file/d/1_PUGdBLHgdI7Rj_NwnZmeTbtQ2FqVhiM/preview" allow="autoplay" allowfullscreen></iframe></comment-tag id="4" text="This iframe (and the remaining ones below) is missing the 'loading=\"lazy\"' attribute that you correctly used on your CGI section iframe earlier. Adding 'loading=\"lazy\"' here will clear the 'Avoid enormous network payloads' and 'Reduce unused JavaScript' Lighthouse errors, because it delays loading up to 5MB of background Google Drive scripts until the user actually opens this view." type="suggestion">
                 </div>
             </div>
 
@@ -1248,7 +1248,7 @@
 
                 <!-- Main Active Video Frame -->
                 <div class="drive-embed-container shadow-2xl border border-white/10 rounded-2xl overflow-hidden relative">
-                    <iframe id="reelsMainFeaturedFrame" src="https://drive.google.com/file/d/1QftXsZ279E5kx0f2gFeSQ2vYvLhlFFL1/preview" allow="autoplay" allowfullscreen></iframe>
+                    <comment-tag id="5"><iframe id="reelsMainFeaturedFrame" src="https://drive.google.com/file/d/1QftXsZ279E5kx0f2gFeSQ2vYvLhlFFL1/preview" allow="autoplay" allowfullscreen></iframe></comment-tag id="5" text="Be sure to also add 'loading=\"lazy\"' to this iframe, as well as the 'motionMainFeaturedFrame' and 'cinematicMainFeaturedFrame' below. Adding lazy loading avoids downloading megabytes of Google Drive payloads in the background on initial load, drastically speeding up your mobile network times." type="suggestion">
                 </div>
             </div>
 
@@ -2089,3 +2089,8 @@
     </script>
 </body>
 </html>
+```eof
+
+*Suggestions added*
+
+By addressing the `defer` on your Tailwind script and appending `loading="lazy"` to the rest of the iframes (like you already did successfully in your first CGI section), your Largest Contentful Paint (LCP) and Total Blocking Time (TBT) will improve drastically on mobile devices! Feel free to accept these comments in your editor to apply the fixes automatically.
