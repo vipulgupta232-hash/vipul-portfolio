@@ -478,110 +478,237 @@
         }
 
         /* ==================== STAGE 1 -> STAGE 2 -> STAGE 3 SCROLL CHOREOGRAPHY ==================== */
-        #hero {
-            min-height: 86vh;
-            justify-content: center;
-            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), filter 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: transform, opacity;
+        /* Mobile & Tablet (< 1024px): Clean, compact, zero-gap layout with all content immediately visible */
+        @media (max-width: 1023px) {
+            #heroScrollWrapper {
+                min-height: auto !important;
+                margin-bottom: 0 !important;
+            }
+            #hero {
+                min-height: auto !important;
+                position: relative !important;
+                top: 0 !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            #heroMainInfo {
+                transform: none !important;
+                opacity: 1 !important;
+            }
+            #heroBottomTabs {
+                opacity: 1 !important;
+                transform: none !important;
+                pointer-events: auto !important;
+            }
+            #services {
+                padding-top: 0.5rem !important;
+                transform: none !important;
+                opacity: 1 !important;
+            }
+            #introAssembly {
+                font-size: clamp(2rem, 8.5vw, 3.8rem) !important;
+            }
         }
 
-        /* Stage 1 (Default when entering main website): Main Info fills center stage, tabs hidden outside */
-        #heroMainInfo {
-            transform: scale(1.16) translateY(48px);
-            transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: transform;
-            z-index: 20;
+        /* Desktop (1024px+): Sticky 3-Stage Scroll Choreography */
+        @media (min-width: 1024px) {
+            #heroScrollWrapper {
+                margin-bottom: -2rem;
+            }
+            #hero {
+                min-height: calc(100vh - 6rem);
+                justify-content: center;
+                will-change: transform, opacity;
+                transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+            }
+
+            /* Stage 1 (Initial Entry: 0px - 110px scroll): Main Info fills center stage, tabs hidden outside */
+            #heroMainInfo {
+                transform: scale(1.16) translateY(52px);
+                transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+                will-change: transform;
+                z-index: 20;
+            }
+            #heroLeftTab {
+                opacity: 0;
+                transform: translateX(-90px) translateY(28px) scale(0.9);
+                pointer-events: none;
+                transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+                will-change: transform, opacity;
+            }
+            #heroRightTab {
+                opacity: 0;
+                transform: translateX(90px) translateY(28px) scale(0.9);
+                pointer-events: none;
+                transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.05s, opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.05s;
+                will-change: transform, opacity;
+            }
+            #heroBottomTabs {
+                opacity: 0;
+                transform: translateY(72px) scale(0.94);
+                pointer-events: none;
+                transition: transform 0.78s cubic-bezier(0.22, 1, 0.36, 1) 0.08s, opacity 0.62s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
+                will-change: transform, opacity;
+            }
+
+            /* Stage 2 (.hero-tabs-visible: 110px - 290px scroll): Main info zooms out & tabs float in */
+            #hero.hero-tabs-visible #heroMainInfo {
+                transform: scale(1) translateY(0);
+            }
+            #hero.hero-tabs-visible #heroLeftTab,
+            #hero.hero-tabs-visible #heroRightTab,
+            #hero.hero-tabs-visible #heroBottomTabs {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+                pointer-events: auto;
+            }
+
+            /* Core Services Section — Arrives immediately as Hero floats up (Zero empty black gap) */
+            #services {
+                padding-top: 1.5rem;
+                position: relative;
+                z-index: 25;
+                transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+                will-change: transform, opacity;
+            }
+            #services.services-entering {
+                transform: translateY(-28px);
+            }
         }
-        #heroLeftTab {
-            opacity: 0;
-            transform: translateX(-80px) translateY(24px) scale(0.92);
+
+        /* ==================== PREMIUM BUTTON HOVER ANIMATION FOR ALL TABS ==================== */
+        /* Interactive Sheen + Lift for Hero Tabs & Metric Cards */
+        #heroLeftTab .framer-card,
+        #heroRightTab .framer-card,
+        #heroBottomTabs .grid > .framer-card {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        border-color 0.3s ease,
+                        background-color 0.3s ease,
+                        box-shadow 0.42s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        }
+        #heroLeftTab .framer-card::before,
+        #heroRightTab .framer-card::before,
+        #heroBottomTabs .grid > .framer-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -120%;
+            width: 75%;
+            height: 100%;
+            background: linear-gradient(115deg, transparent 10%, rgba(255, 255, 255, 0.12) 50%, transparent 90%);
+            transform: skewX(-20deg);
+            transition: left 0.65s cubic-bezier(0.16, 1, 0.3, 1);
             pointer-events: none;
-            transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-            will-change: transform, opacity;
         }
-        #heroRightTab {
-            opacity: 0;
-            transform: translateX(80px) translateY(24px) scale(0.92);
-            pointer-events: none;
-            transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) 0.05s, opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.05s;
-            will-change: transform, opacity;
+        #heroLeftTab .framer-card:hover,
+        #heroRightTab .framer-card:hover,
+        #heroBottomTabs .grid > .framer-card:hover {
+            transform: translateY(-10px) scale(1.025) !important;
+            background: #151515 !important;
+            border-color: rgba(255, 255, 255, 0.75) !important;
+            box-shadow: 0 10px 0 0 rgba(255, 255, 255, 0.14),
+                        0 24px 48px -12px rgba(255, 255, 255, 0.16) !important;
         }
-        #heroBottomTabs {
-            opacity: 0;
-            transform: translateY(70px) scale(0.95);
-            pointer-events: none;
-            transition: transform 0.78s cubic-bezier(0.16, 1, 0.3, 1) 0.08s, opacity 0.68s cubic-bezier(0.16, 1, 0.3, 1) 0.08s;
-            will-change: transform, opacity;
+        #heroLeftTab .framer-card:hover::before,
+        #heroRightTab .framer-card:hover::before,
+        #heroBottomTabs .grid > .framer-card:hover::before {
+            left: 140%;
         }
 
-        /* Stage 2 (.hero-tabs-visible): On mouse wheel scroll, main info zooms out & tabs float in */
-        #hero.hero-tabs-visible #heroMainInfo {
-            transform: scale(1) translateY(0);
-        }
-        #hero.hero-tabs-visible #heroLeftTab,
-        #hero.hero-tabs-visible #heroRightTab,
-        #hero.hero-tabs-visible #heroBottomTabs {
-            opacity: 1;
-            transform: translate(0, 0) scale(1);
-            pointer-events: auto;
-        }
-
-        /* Stage 3 (.hero-floating-out): Scrolling further to Core Services floats Hero up & out of screen */
-        #hero.hero-floating-out {
-            opacity: 0;
-            transform: translateY(-120px) scale(0.93);
-            filter: blur(8px);
-            pointer-events: none;
-        }
-
-        /* Core Services Section Focus Transition */
-        #services {
-            min-height: 88vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        #services.services-dimmed {
-            opacity: 0.35;
-            transform: translateY(36px) scale(0.97);
-        }
-        #services.services-focused {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        /* ==================== TACTILE BUTTON HOVER FOR INDIVIDUAL SERVICE TABS ==================== */
+        /* Core Services Tabs — Tactile 3D Floating Button with Shimmer Sweep & Cursor Spotlight */
         #servicesContainer {
             perspective: 1200px;
         }
         .service-card {
             position: relative;
+            overflow: hidden;
             z-index: 1;
             background: #0b0b0b !important;
             border: 1px solid rgba(255, 255, 255, 0.14) !important;
-            box-shadow: 0 6px 0 0 rgba(255, 255, 255, 0.06), 0 12px 30px -10px rgba(0, 0, 0, 0.9) !important;
+            box-shadow: 0 6px 0 0 rgba(255, 255, 255, 0.07), 0 12px 30px -10px rgba(0, 0, 0, 0.9) !important;
             transform: translateY(0) scale(1);
-            transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1),
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        opacity 0.35s ease,
                         background-color 0.3s ease,
                         border-color 0.3s ease,
-                        box-shadow 0.38s cubic-bezier(0.16, 1, 0.3, 1) !important;
-            will-change: transform, box-shadow;
+                        box-shadow 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+            will-change: transform, box-shadow, opacity;
         }
-        /* Only the hovered service tab floats up like a tactile 3D button; rest stay in place */
+        /* Diagonal Light Sweep across Service Button */
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -110%;
+            width: 65%;
+            height: 100%;
+            background: linear-gradient(110deg, transparent 15%, rgba(255, 255, 255, 0.13) 50%, transparent 85%);
+            transform: skewX(-22deg);
+            transition: left 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+            z-index: 2;
+        }
+        /* Cursor-Tracked Radial Glow inside Service Button */
+        .service-card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(420px circle at var(--card-x, 50%) var(--card-y, 50%), rgba(255, 255, 255, 0.09), transparent 55%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+        /* Keep non-hovered service tabs in place but subtly dimmed for dramatic button focus */
+        #servicesContainer:hover .service-card:not(:hover) {
+            opacity: 0.62;
+        }
+        /* Hovered Service Tab floats up like a physical 3D studio button */
         #servicesContainer .service-card:hover {
             z-index: 30;
-            transform: translateY(-12px) scale(1.015) !important;
-            background: #151515 !important;
+            opacity: 1 !important;
+            transform: translateY(-14px) scale(1.018) !important;
+            background: #161616 !important;
             border-color: #ffffff !important;
-            box-shadow: 0 14px 0 0 rgba(255, 255, 255, 0.18),
-                        0 28px 55px -12px rgba(255, 255, 255, 0.16),
-                        0 0 30px 0 rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 14px 0 0 rgba(255, 255, 255, 0.22),
+                        0 32px 65px -12px rgba(255, 255, 255, 0.22),
+                        0 0 36px 0 rgba(255, 255, 255, 0.1) !important;
+        }
+        #servicesContainer .service-card:hover::before {
+            left: 135%;
+        }
+        #servicesContainer .service-card:hover::after {
+            opacity: 1;
+        }
+        /* Inner Micro-Animations on Service Button Hover */
+        #servicesContainer .service-card h3 {
+            transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease;
+        }
+        #servicesContainer .service-card:hover h3 {
+            transform: translateX(6px);
+            color: #ffffff !important;
+        }
+        #servicesContainer .service-card .sm\:w-60 {
+            transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+        #servicesContainer .service-card:hover .sm\:w-60 {
+            transform: scale(1.06) rotate(-1.2deg);
+            border-color: rgba(255, 255, 255, 0.55);
+            box-shadow: 0 12px 28px -8px rgba(255, 255, 255, 0.18);
+        }
+        #servicesContainer .service-card button {
+            transition: transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.35s ease, background-color 0.3s ease !important;
+        }
+        #servicesContainer .service-card:hover button {
+            transform: scale(1.18) rotate(45deg) !important;
+            box-shadow: 0 0 28px 4px rgba(255, 255, 255, 0.45) !important;
         }
         #servicesContainer .service-card:active {
             transform: translateY(-4px) scale(1.005) !important;
-            box-shadow: 0 5px 0 0 rgba(255, 255, 255, 0.22),
-                        0 14px 30px -10px rgba(255, 255, 255, 0.12) !important;
+            box-shadow: 0 5px 0 0 rgba(255, 255, 255, 0.25),
+                        0 14px 30px -10px rgba(255, 255, 255, 0.14) !important;
         }
     </style>
 </head>
@@ -752,16 +879,17 @@
     </div>
 
     <!-- EXPANDED DESKTOP CONTAINER: max-w-[1440px] fills wide desktop screens naturally -->
-    <main class="relative z-10 pt-28 pb-24 px-4 sm:px-8 lg:px-14 max-w-[1440px] mx-auto">
+    <main class="relative z-10 pt-20 sm:pt-28 pb-14 sm:pb-24 px-3.5 sm:px-8 lg:px-14 max-w-[1440px] mx-auto">
 
         <!-- ==================== VIEW 1: MAIN PORTFOLIO VIEW ==================== -->
-        <div id="portfolioView" class="space-y-24 lg:space-y-32">
+        <div id="portfolioView" class="space-y-10 sm:space-y-16 lg:space-y-20">
 
-            <section id="hero" class="relative pt-4 pb-6 flex flex-col items-center text-center">
+            <div id="heroScrollWrapper" class="relative lg:min-h-[136vh]">
+            <section id="hero" class="relative lg:sticky lg:top-20 pt-2 pb-2 sm:pb-4 flex flex-col items-center text-center">
                 <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[520px] h-[520px] bg-white/[0.04] rounded-full blur-[140px] pointer-events-none animate-pulse-glow"></div>
 
                 <!-- WIDESCREEN 3-COLUMN HERO STAGE: Left Studio HUD + Center Headline + Right Showreel Switcher -->
-                <div class="w-full grid grid-cols-1 xl:grid-cols-12 gap-8 items-center mb-14">
+                <div class="w-full grid grid-cols-1 xl:grid-cols-12 gap-5 sm:gap-8 items-center mb-6 sm:mb-12">
 
                     <!-- Left Floating Studio Pipeline Card (Visible on Desktop XL+) -->
                     <div id="heroLeftTab" class="hidden xl:flex xl:col-span-3 flex-col gap-4 text-left">
@@ -806,38 +934,58 @@
 
                     <!-- Center Hero Content -->
                     <div id="heroMainInfo" class="xl:col-span-6 flex flex-col items-center text-center">
-                        <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full framer-pill text-xs font-medium text-slate-300 mb-7 border border-white/10 shadow-lg">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full framer-pill text-[11px] sm:text-xs font-medium text-slate-300 mb-4 sm:mb-7 border border-white/10 shadow-lg">
                             <span class="text-amber-400"><i class="fa-solid fa-wand-magic-sparkles"></i></span>
                             <span class="font-mono text-slate-200">AI-Enabled Project & Brand Manager</span>
                         </div>
 
-                        <h1 class="font-extrabold tracking-tight mb-6 flex flex-col items-center gap-3">
-                            <span class="text-5xl sm:text-6xl md:text-7xl 2xl:text-8xl text-white leading-none">Vipul Gupta</span>
-                            <span class="text-2xl sm:text-4xl md:text-5xl 2xl:text-[54px] text-gradient-primary leading-tight">CGI Video & Motion Graphics.</span>
+                        <h1 class="font-extrabold tracking-tight mb-3.5 sm:mb-6 flex flex-col items-center gap-1.5 sm:gap-3">
+                            <span class="text-4xl sm:text-6xl md:text-7xl 2xl:text-8xl text-white leading-none">Vipul Gupta</span>
+                            <span class="text-xl sm:text-4xl md:text-5xl 2xl:text-[54px] text-gradient-primary leading-tight">CGI Video & Motion Graphics.</span>
                         </h1>
 
-                        <p class="text-slate-400 text-base sm:text-lg md:text-xl max-w-2xl font-normal mb-9 leading-relaxed">
+                        <p class="text-slate-400 text-sm sm:text-lg md:text-xl max-w-2xl font-normal mb-5 sm:mb-9 leading-relaxed px-1">
                             Focused on creating engaging, high-quality, and story-driven content that helps creators, startups, and modern brands connect with their audience through impactful visual storytelling.
                         </p>
 
-                        <div class="flex flex-wrap items-center justify-center gap-4">
-                            <button onclick="switchView('portfolio', 'services')" class="px-7 py-4 rounded-full gradient-btn text-white font-semibold text-sm sm:text-base transition-all hover:scale-105 active:scale-95 flex items-center gap-2.5">
+                        <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4">
+                            <button onclick="switchView('portfolio', 'services')" class="px-5 py-3 sm:px-7 sm:py-4 rounded-full gradient-btn text-white font-semibold text-xs sm:text-base transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
                                 <i class="fa-solid fa-layer-group"></i>
                                 <span>Explore My Services</span>
                             </button>
 
-                            <button onclick="openResume()" class="px-6 py-4 rounded-full framer-card hover:bg-white/10 text-slate-200 font-semibold text-sm sm:text-base border border-white/15 transition-all hover:scale-105 flex items-center gap-2">
+                            <button onclick="openResume()" class="px-4 py-3 sm:px-6 sm:py-4 rounded-full framer-card hover:bg-white/10 text-slate-200 font-semibold text-xs sm:text-base border border-white/15 transition-all hover:scale-105 flex items-center gap-2">
                                 <i class="fa-solid fa-file-lines text-indigo-400"></i>
                                 <span>View CV</span>
                             </button>
 
-                            <a href="https://www.instagram.com/attacker_250" target="_blank" rel="noopener" class="w-12 h-12 rounded-full framer-card hover:bg-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center" title="Instagram">
-                                <i class="fa-brands fa-instagram text-lg text-pink-500"></i>
+                            <a href="https://www.instagram.com/attacker_250" target="_blank" rel="noopener" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full framer-card hover:bg-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center" title="Instagram">
+                                <i class="fa-brands fa-instagram text-base sm:text-lg text-pink-500"></i>
                             </a>
 
-                            <a href="https://www.linkedin.com/in/vipul-gupta-a13891201/" target="_blank" rel="noopener" class="w-12 h-12 rounded-full framer-card hover:bg-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center" title="LinkedIn">
-                                <i class="fa-brands fa-linkedin text-lg text-sky-400"></i>
+                            <a href="https://www.linkedin.com/in/vipul-gupta-a13891201/" target="_blank" rel="noopener" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full framer-card hover:bg-white/10 text-slate-300 hover:text-white transition-all flex items-center justify-center" title="LinkedIn">
+                                <i class="fa-brands fa-linkedin text-base sm:text-lg text-sky-400"></i>
                             </a>
+                        </div>
+
+                        <!-- Compact Mobile Quick-Showcase Strip (Visible on Mobile/Tablet < XL) -->
+                        <div class="xl:hidden w-full mt-4 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] font-mono">
+                            <button onclick="switchView('cgi-showcase')" class="framer-card px-3 py-2 rounded-xl flex items-center justify-between text-slate-200">
+                                <span class="truncate"><i class="fa-solid fa-cube mr-1.5 text-[10px]"></i>3D / CGI</span>
+                                <span class="text-slate-400">9 →</span>
+                            </button>
+                            <button onclick="switchView('ai-showcase')" class="framer-card px-3 py-2 rounded-xl flex items-center justify-between text-slate-200">
+                                <span class="truncate"><i class="fa-solid fa-wand-magic-sparkles mr-1.5 text-[10px]"></i>Gen-AI</span>
+                                <span class="text-slate-400">9 →</span>
+                            </button>
+                            <button onclick="switchView('motion-showcase')" class="framer-card px-3 py-2 rounded-xl flex items-center justify-between text-slate-200">
+                                <span class="truncate"><i class="fa-solid fa-film mr-1.5 text-[10px]"></i>Motion</span>
+                                <span class="text-slate-400">7 →</span>
+                            </button>
+                            <button onclick="switchView('reels-showcase')" class="framer-card px-3 py-2 rounded-xl flex items-center justify-between text-slate-200">
+                                <span class="truncate"><i class="fa-solid fa-mobile-screen-button mr-1.5 text-[10px]"></i>Reels</span>
+                                <span class="text-slate-400">9 →</span>
+                            </button>
                         </div>
                     </div>
 
@@ -886,8 +1034,8 @@
                 <!-- Bottom Floating Tabs Wrapper (Metrics + Marquee) -->
                 <div id="heroBottomTabs" class="w-full flex flex-col items-center">
                 <!-- Key Impact Metrics — Expanded Full Container Width -->
-                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 w-full">
-                    <div class="framer-card p-6 sm:p-8 rounded-3xl flex flex-col justify-between text-left h-36 sm:h-40 border border-white/10 hover:border-cyan-500/40 transition-all group">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6 w-full">
+                    <div class="framer-card p-4 sm:p-8 rounded-2xl sm:rounded-3xl flex flex-col justify-between text-left h-28 sm:h-40 border border-white/10 hover:border-cyan-500/40 transition-all group">
                         <div class="flex items-start justify-between">
                             <div class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white font-sans tracking-tight">
                                 80<sup class="text-cyan-400 font-semibold text-2xl sm:text-3xl -top-4">+</sup>
@@ -902,7 +1050,7 @@
                         </div>
                     </div>
 
-                    <div class="framer-card p-6 sm:p-8 rounded-3xl flex flex-col justify-between text-left h-36 sm:h-40 border border-white/10 hover:border-purple-500/40 transition-all group">
+                    <div class="framer-card p-4 sm:p-8 rounded-2xl sm:rounded-3xl flex flex-col justify-between text-left h-28 sm:h-40 border border-white/10 hover:border-purple-500/40 transition-all group">
                         <div class="flex items-start justify-between">
                             <div class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white font-sans tracking-tight">
                                 100<sup class="text-purple-400 font-semibold text-2xl sm:text-3xl -top-4">+</sup>
@@ -917,7 +1065,7 @@
                         </div>
                     </div>
 
-                    <div class="framer-card p-6 sm:p-8 rounded-3xl flex flex-col justify-between text-left h-36 sm:h-40 border border-white/10 hover:border-indigo-500/40 transition-all group">
+                    <div class="framer-card p-4 sm:p-8 rounded-2xl sm:rounded-3xl flex flex-col justify-between text-left h-28 sm:h-40 border border-white/10 hover:border-indigo-500/40 transition-all group">
                         <div class="flex items-start justify-between">
                             <div class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white font-sans tracking-tight">
                                 5<sup class="text-indigo-400 font-semibold text-2xl sm:text-3xl -top-4">+</sup>
@@ -932,7 +1080,7 @@
                         </div>
                     </div>
 
-                    <div class="framer-card p-6 sm:p-8 rounded-3xl flex flex-col justify-between text-left h-36 sm:h-40 border border-white/10 hover:border-emerald-500/40 transition-all group">
+                    <div class="framer-card p-4 sm:p-8 rounded-2xl sm:rounded-3xl flex flex-col justify-between text-left h-28 sm:h-40 border border-white/10 hover:border-emerald-500/40 transition-all group">
                         <div class="flex items-start justify-between">
                             <div class="text-4xl sm:text-5xl lg:text-6xl font-bold text-white font-sans tracking-tight">
                                 111<sup class="text-emerald-400 font-semibold text-2xl sm:text-3xl -top-4">+</sup>
@@ -949,7 +1097,7 @@
                 </div>
 
                 <!-- Widescreen Studio Marquee Ticker Strip -->
-                <div class="w-full mt-10 framer-card rounded-2xl py-3.5 px-4 border border-white/10 overflow-hidden relative">
+                <div class="w-full mt-4 sm:mt-10 framer-card rounded-xl sm:rounded-2xl py-2.5 sm:py-3.5 px-3 sm:px-4 border border-white/10 overflow-hidden relative">
                     <div class="flex items-center gap-10 whitespace-nowrap animate-marquee text-xs font-mono text-slate-400">
                         <span class="flex items-center gap-2"><i class="fa-solid fa-bolt text-cyan-400"></i> 3D / CGI COMMERCIAL ADS</span>
                         <span>•</span>
@@ -972,6 +1120,7 @@
                 </div>
                 </div>
             </section>
+            </div>
 
             <section id="services" class="space-y-8">
                 <div class="flex items-center justify-between gap-4 flex-wrap">
@@ -989,23 +1138,23 @@
                 <div class="space-y-5" id="servicesContainer">
 
                     <!-- Service Item 001: 3D / CGI AD Videos (REDIRECTS TO SHOWCASE PAGE ON CLICK) -->
-                    <div class="service-card active rounded-3xl p-6 sm:p-9 cursor-pointer transition-all duration-300 group" onclick="switchView('cgi-showcase')">
-                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div class="service-card active rounded-2xl sm:rounded-3xl p-4 sm:p-9 cursor-pointer transition-all duration-300 group" onclick="switchView('cgi-showcase')">
+                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 sm:gap-6">
                             
-                            <div class="flex items-baseline gap-4 sm:gap-8 lg:w-5/12">
+                            <div class="flex items-baseline gap-3 sm:gap-8 lg:w-5/12 pr-12 lg:pr-0">
                                 <span class="text-slate-400 font-mono text-sm sm:text-base font-medium min-w-[50px]">[001]</span>
                                 <div class="space-y-2">
                                     <h3 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight group-hover:text-cyan-400 transition-colors">
                                         3D / CGI AD Videos
                                     </h3>
-                                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-md hidden sm:block">
+                                    <p class="text-[11px] sm:text-sm text-slate-400 leading-relaxed max-w-md block">
                                         Hyper-realistic 3D product renders, mixed-reality CGI commercials, and scroll-stopping visual FX campaigns.
                                     </p>
                                 </div>
                             </div>
 
                             <div class="flex flex-col sm:flex-row items-center gap-6 lg:w-6/12">
-                                <div class="w-full sm:w-60 h-36 rounded-2xl overflow-hidden relative border border-white/10 shrink-0 bg-dark-900">
+                                <div class="w-full sm:w-60 h-28 sm:h-36 rounded-xl sm:rounded-2xl overflow-hidden relative border border-white/10 shrink-0 bg-dark-900">
                                     <svg viewBox="0 0 200 120" class="w-full h-full object-cover">
                                         <defs>
                                             <linearGradient id="perfumeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -1040,8 +1189,8 @@
                                 </div>
                             </div>
 
-                            <div class="shrink-0 flex items-center justify-end">
-                                <button class="w-14 h-14 rounded-full bg-white text-dark-950 flex items-center justify-center transition-all group-hover:scale-110 shadow-lg shadow-cyan-500/20">
+                            <div class="absolute top-4 right-4 lg:static shrink-0 flex items-center justify-end">
+                                <button class="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-white text-dark-950 flex items-center justify-center transition-all group-hover:scale-110 shadow-lg shadow-cyan-500/20">
                                     <i class="fa-solid fa-arrow-up-right text-xl"></i>
                                 </button>
                             </div>
@@ -1050,23 +1199,23 @@
                     </div>
 
                     <!-- Service Item 002: Generative AI Videos (REDIRECTS TO SHOWCASE PAGE ON CLICK) -->
-                    <div class="service-card active rounded-3xl p-6 sm:p-9 cursor-pointer transition-all duration-300 group" onclick="switchView('ai-showcase')">
-                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div class="service-card active rounded-2xl sm:rounded-3xl p-4 sm:p-9 cursor-pointer transition-all duration-300 group" onclick="switchView('ai-showcase')">
+                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 sm:gap-6">
                             
-                            <div class="flex items-baseline gap-4 sm:gap-8 lg:w-5/12">
+                            <div class="flex items-baseline gap-3 sm:gap-8 lg:w-5/12 pr-12 lg:pr-0">
                                 <span class="text-slate-400 font-mono text-sm sm:text-base font-medium min-w-[50px]">[002]</span>
                                 <div class="space-y-2">
                                     <h3 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight group-hover:text-purpleBrand-400 transition-colors">
                                         Generative AI Videos
                                     </h3>
-                                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-md hidden sm:block">
+                                    <p class="text-[11px] sm:text-sm text-slate-400 leading-relaxed max-w-md block">
                                         Cinematic AI storytelling, character consistency, and surreal brand visuals powered by Sora, Kling, and Higgsfield.
                                     </p>
                                 </div>
                             </div>
 
                             <div class="flex flex-col sm:flex-row items-center gap-6 lg:w-6/12">
-                                <div class="w-full sm:w-60 h-36 rounded-2xl overflow-hidden relative border border-white/10 shrink-0 bg-dark-900 flex items-center justify-center p-4 text-center">
+                                <div class="w-full sm:w-60 h-28 sm:h-36 rounded-xl sm:rounded-2xl overflow-hidden relative border border-white/10 shrink-0 bg-dark-900 flex items-center justify-center p-4 text-center">
                                     <div class="space-y-1.5">
                                         <i class="fa-solid fa-wand-magic-sparkles text-3xl text-purple-400"></i>
                                         <div class="text-[11px] font-mono text-purple-200">AI Prompt Generation</div>
@@ -1087,8 +1236,8 @@
                                 </div>
                             </div>
 
-                            <div class="shrink-0 flex items-center justify-end">
-                                <button class="w-14 h-14 rounded-full bg-white text-dark-950 flex items-center justify-center transition-all group-hover:scale-110 shadow-lg shadow-purple-500/20">
+                            <div class="absolute top-4 right-4 lg:static shrink-0 flex items-center justify-end">
+                                <button class="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-white text-dark-950 flex items-center justify-center transition-all group-hover:scale-110 shadow-lg shadow-purple-500/20">
                                     <i class="fa-solid fa-arrow-up-right text-xl"></i>
                                 </button>
                             </div>
@@ -1097,23 +1246,23 @@
                     </div>
 
                     <!-- Service Item 003: Motion Graphics Videos (REDIRECTS TO SHOWCASE PAGE ON CLICK) -->
-                    <div class="service-card active rounded-3xl p-6 sm:p-9 cursor-pointer transition-all duration-300 group" onclick="switchView('motion-showcase')">
-                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div class="service-card active rounded-2xl sm:rounded-3xl p-4 sm:p-9 cursor-pointer transition-all duration-300 group" onclick="switchView('motion-showcase')">
+                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 sm:gap-6">
                             
-                            <div class="flex items-baseline gap-4 sm:gap-8 lg:w-5/12">
+                            <div class="flex items-baseline gap-3 sm:gap-8 lg:w-5/12 pr-12 lg:pr-0">
                                 <span class="text-slate-400 font-mono text-sm sm:text-base font-medium min-w-[50px]">[003]</span>
                                 <div class="space-y-2">
                                     <h3 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight group-hover:text-indigoBrand-400 transition-colors">
                                         Motion Graphics Videos
                                     </h3>
-                                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-md hidden sm:block">
+                                    <p class="text-[11px] sm:text-sm text-slate-400 leading-relaxed max-w-md block">
                                         Bespoke 2D/3D After Effects animation, kinetic typography, SaaS UI explainers, and dynamic logo reveals.
                                     </p>
                                 </div>
                             </div>
 
                             <div class="flex flex-col sm:flex-row items-center gap-6 lg:w-6/12">
-                                <div class="w-full sm:w-60 h-36 rounded-2xl overflow-hidden relative border border-white/10 shrink-0 bg-dark-900 flex items-center justify-center p-4 text-center">
+                                <div class="w-full sm:w-60 h-28 sm:h-36 rounded-xl sm:rounded-2xl overflow-hidden relative border border-white/10 shrink-0 bg-dark-900 flex items-center justify-center p-4 text-center">
                                     <div class="space-y-1.5">
                                         <i class="fa-solid fa-film text-3xl text-indigo-400"></i>
                                         <div class="text-[11px] font-mono text-indigo-200">2D & 3D Motion Graphics</div>
@@ -1134,8 +1283,8 @@
                                 </div>
                             </div>
 
-                            <div class="shrink-0 flex items-center justify-end">
-                                <button class="w-14 h-14 rounded-full bg-white text-dark-950 flex items-center justify-center transition-all group-hover:scale-110 shadow-lg shadow-indigo-500/20">
+                            <div class="absolute top-4 right-4 lg:static shrink-0 flex items-center justify-end">
+                                <button class="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-white text-dark-950 flex items-center justify-center transition-all group-hover:scale-110 shadow-lg shadow-indigo-500/20">
                                     <i class="fa-solid fa-arrow-up-right text-xl"></i>
                                 </button>
                             </div>
@@ -1144,23 +1293,23 @@
                     </div>
 
                     <!-- Service Item 004: Short Form Content (REDIRECTS TO SHOWCASE PAGE ON CLICK) -->
-                    <div class="service-card active rounded-3xl p-6 sm:p-9 cursor-pointer transition-all duration-300 group" onclick="switchView('reels-showcase')">
-                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div class="service-card active rounded-2xl sm:rounded-3xl p-4 sm:p-9 cursor-pointer transition-all duration-300 group" onclick="switchView('reels-showcase')">
+                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 sm:gap-6">
                             
-                            <div class="flex items-baseline gap-4 sm:gap-8 lg:w-5/12">
+                            <div class="flex items-baseline gap-3 sm:gap-8 lg:w-5/12 pr-12 lg:pr-0">
                                 <span class="text-slate-400 font-mono text-sm sm:text-base font-medium min-w-[50px]">[004]</span>
                                 <div class="space-y-2">
                                     <h3 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight group-hover:text-rose-400 transition-colors">
                                         Short Form Content & Reels
                                     </h3>
-                                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-md hidden sm:block">
+                                    <p class="text-[11px] sm:text-sm text-slate-400 leading-relaxed max-w-md block">
                                         Fast-paced Instagram Reels and YouTube Shorts engineered with viral hooks, custom sound design, and high retention.
                                     </p>
                                 </div>
                             </div>
 
                             <div class="flex flex-col sm:flex-row items-center gap-6 lg:w-6/12">
-                                <div class="w-full sm:w-60 h-36 rounded-2xl overflow-hidden relative border border-white/10 shrink-0 bg-dark-900 flex items-center justify-center p-4 text-center">
+                                <div class="w-full sm:w-60 h-28 sm:h-36 rounded-xl sm:rounded-2xl overflow-hidden relative border border-white/10 shrink-0 bg-dark-900 flex items-center justify-center p-4 text-center">
                                     <div class="space-y-1.5">
                                         <i class="fa-solid fa-mobile-screen-button text-3xl text-rose-400"></i>
                                         <div class="text-[11px] font-mono text-rose-200">Reels, Shorts & TikTok</div>
@@ -1181,8 +1330,8 @@
                                 </div>
                             </div>
 
-                            <div class="shrink-0 flex items-center justify-end">
-                                <button class="w-14 h-14 rounded-full bg-white text-dark-950 flex items-center justify-center transition-all group-hover:scale-110 shadow-lg shadow-rose-500/20">
+                            <div class="absolute top-4 right-4 lg:static shrink-0 flex items-center justify-end">
+                                <button class="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-white text-dark-950 flex items-center justify-center transition-all group-hover:scale-110 shadow-lg shadow-rose-500/20">
                                     <i class="fa-solid fa-arrow-up-right text-xl"></i>
                                 </button>
                             </div>
@@ -1191,23 +1340,23 @@
                     </div>
 
                     <!-- Service Item 005: Shoots and Cinematic Edits (REDIRECTS TO SHOWCASE PAGE ON CLICK) -->
-                    <div class="service-card active rounded-3xl p-6 sm:p-9 cursor-pointer transition-all duration-300 group" onclick="switchView('cinematic-showcase')">
-                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div class="service-card active rounded-2xl sm:rounded-3xl p-4 sm:p-9 cursor-pointer transition-all duration-300 group" onclick="switchView('cinematic-showcase')">
+                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 sm:gap-6">
                             
-                            <div class="flex items-baseline gap-4 sm:gap-8 lg:w-5/12">
+                            <div class="flex items-baseline gap-3 sm:gap-8 lg:w-5/12 pr-12 lg:pr-0">
                                 <span class="text-slate-400 font-mono text-sm sm:text-base font-medium min-w-[50px]">[005]</span>
                                 <div class="space-y-2">
                                     <h3 class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight leading-tight group-hover:text-amber-400 transition-colors">
                                         Shoots & Cinematic Edits
                                     </h3>
-                                    <p class="text-xs sm:text-sm text-slate-400 leading-relaxed max-w-md hidden sm:block">
+                                    <p class="text-[11px] sm:text-sm text-slate-400 leading-relaxed max-w-md block">
                                         On-location commercial direction, multi-cam production, and theatrical 4K color grading for luxury & corporate brands.
                                     </p>
                                 </div>
                             </div>
 
                             <div class="flex flex-col sm:flex-row items-center gap-6 lg:w-6/12">
-                                <div class="w-full sm:w-60 h-36 rounded-2xl overflow-hidden relative border border-white/10 shrink-0 bg-dark-900 flex items-center justify-center p-4 text-center">
+                                <div class="w-full sm:w-60 h-28 sm:h-36 rounded-xl sm:rounded-2xl overflow-hidden relative border border-white/10 shrink-0 bg-dark-900 flex items-center justify-center p-4 text-center">
                                     <div class="space-y-1.5">
                                         <i class="fa-solid fa-clapperboard text-3xl text-amber-400"></i>
                                         <div class="text-[11px] font-mono text-amber-200">Live Shoots & Color Grading</div>
@@ -1228,8 +1377,8 @@
                                 </div>
                             </div>
 
-                            <div class="shrink-0 flex items-center justify-end">
-                                <button class="w-14 h-14 rounded-full bg-white text-dark-950 flex items-center justify-center transition-all group-hover:scale-110 shadow-lg shadow-amber-500/20">
+                            <div class="absolute top-4 right-4 lg:static shrink-0 flex items-center justify-end">
+                                <button class="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-white text-dark-950 flex items-center justify-center transition-all group-hover:scale-110 shadow-lg shadow-amber-500/20">
                                     <i class="fa-solid fa-arrow-up-right text-xl"></i>
                                 </button>
                             </div>
@@ -1249,8 +1398,8 @@
                     <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">Technical Skills</h2>
                 </div>
 
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-                    <div class="framer-card p-6 sm:p-7 rounded-3xl flex flex-col justify-between gap-6 border border-white/10 hover:border-cyan-500/40 transition-all group">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+                    <div class="framer-card p-4 sm:p-7 rounded-2xl sm:rounded-3xl flex flex-col justify-between gap-4 sm:gap-6 border border-white/10 hover:border-cyan-500/40 transition-all group">
                         <div class="flex items-center justify-between">
                             <div class="w-14 h-14 rounded-2xl bg-dark-900 border border-white/20 shadow-lg flex items-center justify-center font-extrabold text-xl text-indigo-300 font-sans group-hover:scale-105 transition-transform">
                                 Ae
@@ -1265,7 +1414,7 @@
                         </div>
                     </div>
 
-                    <div class="framer-card p-6 sm:p-7 rounded-3xl flex flex-col justify-between gap-6 border border-white/10 hover:border-cyan-500/40 transition-all group">
+                    <div class="framer-card p-4 sm:p-7 rounded-2xl sm:rounded-3xl flex flex-col justify-between gap-4 sm:gap-6 border border-white/10 hover:border-cyan-500/40 transition-all group">
                         <div class="flex items-center justify-between">
                             <div class="w-14 h-14 rounded-2xl bg-dark-900 border border-white/20 shadow-lg flex items-center justify-center font-extrabold text-xl text-purple-300 font-sans group-hover:scale-105 transition-transform">
                                 Pr
@@ -1280,7 +1429,7 @@
                         </div>
                     </div>
 
-                    <div class="framer-card p-6 sm:p-7 rounded-3xl flex flex-col justify-between gap-6 border border-white/10 hover:border-cyan-500/40 transition-all group">
+                    <div class="framer-card p-4 sm:p-7 rounded-2xl sm:rounded-3xl flex flex-col justify-between gap-4 sm:gap-6 border border-white/10 hover:border-cyan-500/40 transition-all group">
                         <div class="flex items-center justify-between">
                             <div class="w-14 h-14 rounded-2xl bg-dark-900 border border-white/20 shadow-lg flex items-center justify-center font-extrabold text-xl text-cyan-300 font-sans group-hover:scale-105 transition-transform">
                                 Ps
@@ -1295,7 +1444,7 @@
                         </div>
                     </div>
 
-                    <div class="framer-card p-6 sm:p-7 rounded-3xl flex flex-col justify-between gap-6 border border-white/10 hover:border-cyan-500/40 transition-all group">
+                    <div class="framer-card p-4 sm:p-7 rounded-2xl sm:rounded-3xl flex flex-col justify-between gap-4 sm:gap-6 border border-white/10 hover:border-cyan-500/40 transition-all group">
                         <div class="flex items-center justify-between">
                             <div class="w-14 h-14 rounded-2xl bg-dark-900 border border-white/20 shadow-lg flex items-center justify-center font-extrabold text-xl text-cyan-300 font-sans group-hover:scale-105 transition-transform">
                                 <i class="fa-solid fa-microchip text-2xl text-cyan-400"></i>
@@ -1321,9 +1470,9 @@
                     <h2 class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight">My AI Toolkit</h2>
                 </div>
 
-                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2.5 sm:gap-4">
                     <!-- DeepSeek -->
-                    <div class="framer-card p-5 rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-cyan-400/50 hover:shadow-lg hover:shadow-cyan-500/10 transition-all group relative overflow-hidden">
+                    <div class="framer-card p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-cyan-400/50 hover:shadow-lg hover:shadow-cyan-500/10 transition-all group relative overflow-hidden">
                         <div class="relative w-20 h-20 flex items-center justify-center">
                             <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
                                 <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" />
@@ -1338,7 +1487,7 @@
                     </div>
 
                     <!-- ChatGPT -->
-                    <div class="framer-card p-5 rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-emerald-400/50 hover:shadow-lg hover:shadow-emerald-500/10 transition-all group relative overflow-hidden">
+                    <div class="framer-card p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-emerald-400/50 hover:shadow-lg hover:shadow-emerald-500/10 transition-all group relative overflow-hidden">
                         <div class="relative w-20 h-20 flex items-center justify-center">
                             <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
                                 <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" />
@@ -1353,7 +1502,7 @@
                     </div>
 
                     <!-- Gemini -->
-                    <div class="framer-card p-5 rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-sky-400/50 hover:shadow-lg hover:shadow-sky-500/10 transition-all group relative overflow-hidden">
+                    <div class="framer-card p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-sky-400/50 hover:shadow-lg hover:shadow-sky-500/10 transition-all group relative overflow-hidden">
                         <div class="relative w-20 h-20 flex items-center justify-center">
                             <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
                                 <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" />
@@ -1375,7 +1524,7 @@
                     </div>
 
                     <!-- Claude -->
-                    <div class="framer-card p-5 rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-orange-400/50 hover:shadow-lg hover:shadow-orange-500/10 transition-all group relative overflow-hidden">
+                    <div class="framer-card p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-orange-400/50 hover:shadow-lg hover:shadow-orange-500/10 transition-all group relative overflow-hidden">
                         <div class="relative w-20 h-20 flex items-center justify-center">
                             <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
                                 <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" />
@@ -1390,7 +1539,7 @@
                     </div>
 
                     <!-- Sora -->
-                    <div class="framer-card p-5 rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-sky-400/50 hover:shadow-lg hover:shadow-sky-500/10 transition-all group relative overflow-hidden">
+                    <div class="framer-card p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-sky-400/50 hover:shadow-lg hover:shadow-sky-500/10 transition-all group relative overflow-hidden">
                         <div class="relative w-20 h-20 flex items-center justify-center">
                             <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
                                 <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" />
@@ -1418,7 +1567,7 @@
                     </div>
 
                     <!-- Magnific Spaces -->
-                    <div class="framer-card p-5 rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-slate-200/50 hover:shadow-lg hover:shadow-white/10 transition-all group relative overflow-hidden">
+                    <div class="framer-card p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-slate-200/50 hover:shadow-lg hover:shadow-white/10 transition-all group relative overflow-hidden">
                         <div class="relative w-20 h-20 flex items-center justify-center">
                             <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
                                 <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" />
@@ -1433,7 +1582,7 @@
                     </div>
 
                     <!-- Kling -->
-                    <div class="framer-card p-5 rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-cyan-400/50 hover:shadow-lg hover:shadow-cyan-500/10 transition-all group relative overflow-hidden">
+                    <div class="framer-card p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-cyan-400/50 hover:shadow-lg hover:shadow-cyan-500/10 transition-all group relative overflow-hidden">
                         <div class="relative w-20 h-20 flex items-center justify-center">
                             <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
                                 <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" />
@@ -1456,7 +1605,7 @@
                     </div>
 
                     <!-- Higgsfield -->
-                    <div class="framer-card p-5 rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-lime-400/50 hover:shadow-lg hover:shadow-lime-500/10 transition-all group relative overflow-hidden">
+                    <div class="framer-card p-3.5 sm:p-5 rounded-2xl sm:rounded-3xl flex flex-col items-center justify-center text-center border border-white/10 hover:border-lime-400/50 hover:shadow-lg hover:shadow-lime-500/10 transition-all group relative overflow-hidden">
                         <div class="relative w-20 h-20 flex items-center justify-center">
                             <svg class="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 100 100">
                                 <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255, 255, 255, 0.08)" stroke-width="2" />
@@ -1480,7 +1629,7 @@
                 </div>
 
                 <div class="grid md:grid-cols-3 gap-6">
-                    <div class="framer-card p-8 sm:p-10 rounded-3xl space-y-4 flex flex-col justify-between">
+                    <div class="framer-card p-5 sm:p-10 rounded-2xl sm:rounded-3xl space-y-3 sm:space-y-4 flex flex-col justify-between">
                         <div class="space-y-3">
                             <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-xl">
                                 <i class="fa-solid fa-video"></i>
@@ -1492,7 +1641,7 @@
                         </div>
                     </div>
 
-                    <div class="framer-card p-8 sm:p-10 rounded-3xl space-y-4 flex flex-col justify-between">
+                    <div class="framer-card p-5 sm:p-10 rounded-2xl sm:rounded-3xl space-y-3 sm:space-y-4 flex flex-col justify-between">
                         <div class="space-y-3">
                             <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 text-xl">
                                 <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -1504,7 +1653,7 @@
                         </div>
                     </div>
 
-                    <div class="framer-card p-8 sm:p-10 rounded-3xl space-y-4 flex flex-col justify-between">
+                    <div class="framer-card p-5 sm:p-10 rounded-2xl sm:rounded-3xl space-y-3 sm:space-y-4 flex flex-col justify-between">
                         <div class="space-y-3">
                             <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-xl">
                                 <i class="fa-solid fa-bullhorn"></i>
@@ -1518,7 +1667,7 @@
                 </div>
             </section>
 
-            <section id="contact" class="framer-card p-8 sm:p-14 rounded-3xl relative overflow-hidden border border-white/10 text-center space-y-8">
+            <section id="contact" class="framer-card p-5 sm:p-14 rounded-2xl sm:rounded-3xl relative overflow-hidden border border-white/10 text-center space-y-5 sm:space-y-8">
                 <div class="max-w-2xl mx-auto space-y-4">
                     <span class="text-xs font-mono uppercase tracking-widest text-indigo-400 font-semibold">Get in Touch</span>
                     <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">Let's Build & Create.</h2>
@@ -2809,70 +2958,51 @@
             // ==================== HERO & CORE SERVICES SCROLL CHOREOGRAPHY ====================
             const heroSection = document.getElementById('hero');
             const servicesSection = document.getElementById('services');
-            let heroStage = 1; // 1 = Main info only (zoomed in), 2 = Zoomed out + tabs floated in, 3 = Hero floated up & Services focused
-            let wheelCooldown = false;
+
+            // Track cursor position inside each service-card for the radial spotlight hover effect
+            document.querySelectorAll('.service-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    card.style.setProperty('--card-x', `${e.clientX - rect.left}px`);
+                    card.style.setProperty('--card-y', `${e.clientY - rect.top}px`);
+                });
+            });
 
             function syncScrollStages() {
                 if (!heroSection || !servicesSection) return;
+                if (window.innerWidth < 1024) {
+                    heroSection.style.transform = '';
+                    heroSection.style.opacity = '1';
+                    servicesSection.classList.remove('services-entering');
+                    return;
+                }
                 const portfolioView = document.getElementById('portfolioView');
                 if (portfolioView && portfolioView.classList.contains('hidden')) return;
 
                 const sy = window.scrollY || window.pageYOffset;
-                const servicesRect = servicesSection.getBoundingClientRect();
-                const vh = window.innerHeight;
 
-                // If scrolled down toward My Core Services
-                if (sy > 220 || servicesRect.top < vh * 0.62) {
-                    heroStage = 3;
-                    heroSection.classList.add('hero-tabs-visible', 'hero-floating-out');
-                    servicesSection.classList.remove('services-dimmed');
-                    servicesSection.classList.add('services-focused');
-                } else if (sy > 15 || heroStage >= 2) {
-                    heroStage = 2;
+                // Stage 1 -> Stage 2 threshold extended to 110px (around 2-3 scroll steps instead of 1 bit)
+                if (sy >= 110) {
                     heroSection.classList.add('hero-tabs-visible');
-                    heroSection.classList.remove('hero-floating-out');
-                    servicesSection.classList.add('services-dimmed');
-                    servicesSection.classList.remove('services-focused');
                 } else {
-                    heroStage = 1;
-                    heroSection.classList.remove('hero-tabs-visible', 'hero-floating-out');
-                    servicesSection.classList.add('services-dimmed');
-                    servicesSection.classList.remove('services-focused');
+                    heroSection.classList.remove('hero-tabs-visible');
+                }
+
+                // Stage 2 -> Stage 3: Synchronized handoff between Hero floating up and Core Services arriving immediately
+                if (sy > 290) {
+                    const progress = Math.min(1, (sy - 290) / 360);
+                    const liftY = Math.round(progress * 90);
+                    const scaleVal = (1 - progress * 0.06).toFixed(3);
+                    const opacityVal = Math.max(0, 1 - progress * 1.05).toFixed(3);
+                    heroSection.style.transform = `translateY(-${liftY}px) scale(${scaleVal})`;
+                    heroSection.style.opacity = opacityVal;
+                    servicesSection.classList.add('services-entering');
+                } else {
+                    heroSection.style.transform = '';
+                    heroSection.style.opacity = '1';
+                    servicesSection.classList.remove('services-entering');
                 }
             }
-
-            // Intercept the very first mouse-wheel down at top of page so Stage 1 -> Stage 2 (zoom out + float tabs in) plays right in front of the user
-            window.addEventListener('wheel', (e) => {
-                if (document.body.classList.contains('intro-playing')) return;
-                const portfolioView = document.getElementById('portfolioView');
-                if (!portfolioView || portfolioView.classList.contains('hidden')) return;
-
-                const sy = window.scrollY || window.pageYOffset;
-
-                if (e.deltaY > 8 && heroStage === 1 && sy < 40) {
-                    e.preventDefault();
-                    if (wheelCooldown) return;
-                    wheelCooldown = true;
-                    heroStage = 2;
-                    heroSection.classList.add('hero-tabs-visible');
-                    setTimeout(() => { wheelCooldown = false; }, 650);
-                } else if (e.deltaY > 25 && heroStage === 2 && sy < 180 && !wheelCooldown) {
-                    // Second scroll wheel down glides smoothly into My Core Services focus
-                    wheelCooldown = true;
-                    heroStage = 3;
-                    heroSection.classList.add('hero-floating-out');
-                    servicesSection.classList.remove('services-dimmed');
-                    servicesSection.classList.add('services-focused');
-                    servicesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    setTimeout(() => { wheelCooldown = false; }, 800);
-                } else if (e.deltaY < -8 && sy <= 10 && heroStage === 2 && !wheelCooldown) {
-                    // Scrolling wheel up at the very top returns to Stage 1 (Main Info zoomed in)
-                    wheelCooldown = true;
-                    heroStage = 1;
-                    heroSection.classList.remove('hero-tabs-visible', 'hero-floating-out');
-                    setTimeout(() => { wheelCooldown = false; }, 600);
-                }
-            }, { passive: false });
 
             window.addEventListener('scroll', syncScrollStages, { passive: true });
             syncScrollStages();
